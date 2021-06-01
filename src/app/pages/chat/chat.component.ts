@@ -17,6 +17,7 @@ export class ChatComponent implements OnInit {
   idOriginComponent: number = 0;
   idDestinyComponent: number = 0;
   message = "";
+  newMessagesAlert: string[] = [];
 
   @ViewChild('chatScroll') chatScroll!: ElementRef;
 
@@ -49,6 +50,7 @@ export class ChatComponent implements OnInit {
   readMessages(): void {
     this.chatService.read().subscribe(
       data => {
+        const anyMessagesForMe = data.filter(x => x.idDestiny == this.idOriginComponent);
        const filterMessage = data.filter(x => x.idOrigin == this.idOriginComponent && x.idDestiny == this.idDestinyComponent
                                           || x.idOrigin == this.idDestinyComponent && x.idDestiny == this.idOriginComponent );
 
@@ -62,6 +64,7 @@ export class ChatComponent implements OnInit {
 
       }
        this.setRead(filterMessage);
+       this.alertMessage(anyMessagesForMe);
       }
     )
   }
@@ -95,12 +98,22 @@ export class ChatComponent implements OnInit {
     messages.map(x => {
       if(x.read == false && x.idDestiny == this.idOriginComponent){
         x.read = true;
-        this.chatService.update(x).subscribe;
+        this.chatService.update(x).subscribe();
       }
     })
   }
 
   private scroll(){
     setTimeout(() => this.chatScroll.nativeElement.scrollTop = 1000000,500);
+  }
+
+  private alertMessage( msg: Message[]){
+    msg.map(z => {
+      this.newMessagesAlert = [];
+      if (!z.read) {
+        const origin = this.contacts.find(w => w.id == z.idOrigin);
+        this.newMessagesAlert.push('Você tem novas mensagens de ' + origin?.name);
+      }
+    })
   }
 }
