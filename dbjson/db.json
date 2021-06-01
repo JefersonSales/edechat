@@ -1,0 +1,13 @@
+{
+  "contacts" : [
+    {"id": 1, "name": "Jeferson Sales"},
+    {"id": 2, "name": "Brian Bradley"},
+    {"id": 3, "name": "Sérgio Sidoso"},
+    {"id": 4, "name": "Carlos Carlan"}
+  ],
+
+  "messages" : [
+
+  ]
+
+}
