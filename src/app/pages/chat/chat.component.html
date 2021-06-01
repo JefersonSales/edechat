@@ -1,10 +1,16 @@
 
-<div class="alert alert-warning fake-toast" *ngIf="newMessagesAlert.length > 0">
+<div class="alert bg-primary text-white fake-toast rounded-pill text-center p-2 ps-3 pe-3" *ngIf="newMessagesAlert.length > 0">
   <span *ngFor="let msg of newMessagesAlert">{{msg}}</span>
 </div>
 
 <div class="content">
   <section id="contacts">
+    <div class="card bg-secondary text-white border-0 p-2 d-flex flex-row" style="border-radius: 0px;">
+          <i class="bi bi-person-circle me-2 p-2" style="font-size: 200%;"></i>
+          <h5 class="align-self-center mb-0">{{origin.name}}</h5>
+        </div>
+        <br>
+        <small class="p-2 ps-3 text-muted">CONTATOS</small>
     <ul class="list-group">
       <li class="list-group-item" [class.active]="item.id === idDestinyComponent" *ngFor="let item of contacts"
         (click)="selectContact(item)">

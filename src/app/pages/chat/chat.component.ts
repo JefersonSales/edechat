@@ -18,6 +18,7 @@ export class ChatComponent implements OnInit {
   idDestinyComponent: number = 0;
   message = "";
   newMessagesAlert: string[] = [];
+  origin = new Contact();
 
   @ViewChild('chatScroll') chatScroll!: ElementRef;
 
@@ -40,6 +41,7 @@ export class ChatComponent implements OnInit {
     this.contactService.read().subscribe(
       data => {
         this.contacts = data.filter(x => x.id != this.idOriginComponent);
+        this.origin = data.find(x => x.id == this.idOriginComponent) || new Contact();
       },
       error => {
         console.error(error);

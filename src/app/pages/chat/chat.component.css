@@ -41,3 +41,8 @@
 .content-send {
   width: 100%;
 }
+
+.fake-toast {
+  position: fixed; z-index: 1000; top: .3rem; left: 50%; margin-left: -160px;
+  max-width: 320px; font-size: 12px; opacity: .8;
+}
