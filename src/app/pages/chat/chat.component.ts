@@ -11,12 +11,11 @@ import { ChatService } from '../../services/chat.service';
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit {
-  messages: Message[] = [];
-  contacts: Contact[] = []
+  contacts: Contact[] = [];
+  chat: Message[] = [];
 
   idOriginComponent: number = 0;
   idDestinyComponent: number = 0;
-  chat: Message[] = [];
   message = "";
 
   constructor(
@@ -31,9 +30,11 @@ export class ChatComponent implements OnInit {
     }
 
     this.readContacts();
+
+    setInterval(() => this.readMessages(), 2000);
   }
 
-  readContacts(){
+  readContacts(): void {
     this.contactService.read().subscribe(
       data => {
         this.contacts = data.filter(x => x.id != this.idOriginComponent);
@@ -44,25 +45,55 @@ export class ChatComponent implements OnInit {
     )
   }
 
+  readMessages(): void {
+    this.chatService.read().subscribe(
+      data => {
+       const filterMessage = data.filter(x => x.idOrigin == this.idOriginComponent && x.idDestiny == this.idDestinyComponent
+                                          || x.idOrigin == this.idDestinyComponent && x.idDestiny == this.idOriginComponent );
+
+       if(filterMessage.length > this.chat.length){
+         this.chat = filterMessage;
+       }
+
+       if(filterMessage.length == 0){
+        this.chat = [];
+      }
+       this.setRead(filterMessage);
+      }
+    )
+  }
+
   send(){
     const msg = new Message();
     msg.description = this.message;
     msg.idDestiny = this.idDestinyComponent;
     msg.idOrigin = this.idOriginComponent;
-    msg.hour = ( new Date()).toISOString().split('T')[1];
+    msg.hour = ( new Date()).toISOString().split('T')[1].substring(0,5);
     msg.date = ( new Date()).toISOString().split('T')[0];
-    this.messages.push( msg );
-    this.updateChat();
-    this.message = "";
+
+    this.chatService.create(msg).subscribe(
+      data => {
+        this.readMessages();
+        this.message = "";
+      },
+      error => {
+        console.error(error);
+      }
+    )
   }
 
   selectContact(contact: Contact){
     this.idDestinyComponent = contact.id;
-    this.updateChat();
+    this.readMessages();
   }
 
-  updateChat() {
-    this.chat = this.messages.filter(x => x.id === this.idOriginComponent || x.id === this.idDestinyComponent)
+  private setRead(messages: Message[]){
+    messages.map(x => {
+      if(x.read == false && x.idDestiny == this.idOriginComponent){
+        x.read = true;
+        this.chatService.update(x).subscribe;
+      }
+    })
   }
 
 }
