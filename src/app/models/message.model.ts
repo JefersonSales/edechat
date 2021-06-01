@@ -5,4 +5,5 @@ export class Message {
   hour!: string;
   idOrigin!: number;
   idDestiny!: number;
+  ready = false;
 }
