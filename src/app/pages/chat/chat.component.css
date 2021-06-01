@@ -1,0 +1,13 @@
+.content {
+  display: flex;
+}
+
+#contacts {
+  width: 480px;
+}
+
+#chat {
+  background-image: url("/assets/images/bg01.png");
+  width: 100%;
+  height: 96vh;
+}
