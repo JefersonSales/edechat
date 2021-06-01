@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Message } from '../../models/message.model';
 import { Contact } from '../../models/contact.model';
@@ -18,6 +18,8 @@ export class ChatComponent implements OnInit {
   idDestinyComponent: number = 0;
   message = "";
 
+  @ViewChild('chatScroll') chatScroll!: ElementRef;
+
   constructor(
     private route: ActivatedRoute,
     private contactService: ContactService,
@@ -30,7 +32,6 @@ export class ChatComponent implements OnInit {
     }
 
     this.readContacts();
-
     setInterval(() => this.readMessages(), 2000);
   }
 
@@ -53,10 +54,12 @@ export class ChatComponent implements OnInit {
 
        if(filterMessage.length > this.chat.length){
          this.chat = filterMessage;
+         this.scroll();
        }
 
        if(filterMessage.length == 0){
         this.chat = [];
+
       }
        this.setRead(filterMessage);
       }
@@ -85,6 +88,7 @@ export class ChatComponent implements OnInit {
   selectContact(contact: Contact){
     this.idDestinyComponent = contact.id;
     this.readMessages();
+    this.scroll();
   }
 
   private setRead(messages: Message[]){
@@ -96,4 +100,7 @@ export class ChatComponent implements OnInit {
     })
   }
 
+  private scroll(){
+    setTimeout(() => this.chatScroll.nativeElement.scrollTop = 1000000,500);
+  }
 }

@@ -7,17 +7,19 @@
       </li>
     </ul>
   </section>
-  <section id="chat" class="p-4">
-    <div class="alert alert-warning mb-3" *ngIf="chat.length == 0">
-      <div>Nenhuma mensagem para exibir<br> Selecione um contato</div>
-    </div>
-    <div class="alert mb-3" *ngFor="let msg of chat"
-      [class.alert-primary]="msg.idOrigin == idOriginComponent"
-      [class.my-chat-balloon]="msg.idOrigin == idOriginComponent"
-      [class.alert-secondary]="msg.idOrigin == idDestinyComponent"
-      [class.contact-chat-balloon]="msg.idOrigin == idDestinyComponent" role="alert">
-      <div>{{ msg.description }}</div>
-      <small class="chat-balloon-time">{{ msg.hour }}</small>
+  <section id="chat" class="d-flex flex-column">
+    <div id="chat-content" class="p-4 flex-grow-1" #chatScroll>
+      <div class="alert alert-warning mb-3" *ngIf="chat.length == 0">
+        <div>Nenhuma mensagem para exibir<br> Selecione um contato</div>
+      </div>
+      <div class="alert mb-3" *ngFor="let msg of chat"
+        [class.alert-primary]="msg.idOrigin == idOriginComponent"
+        [class.my-chat-balloon]="msg.idOrigin == idOriginComponent"
+        [class.alert-secondary]="msg.idOrigin == idDestinyComponent"
+        [class.contact-chat-balloon]="msg.idOrigin == idDestinyComponent" role="alert">
+        <div>{{ msg.description }}</div>
+        <small class="chat-balloon-time">{{ msg.hour }}</small>
+      </div>
     </div>
 
     <div class="card content-send">
