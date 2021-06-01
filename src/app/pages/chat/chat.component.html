@@ -1,9 +1,40 @@
 <div class="content">
   <section id="contacts">
     <ul class="list-group">
-      <li class="list-group-item" *ngFor="let item of contacts">{{item.name}}</li>
+      <li class="list-group-item" [class.active]="item.id === idDestinyComponent" *ngFor="let item of contacts"
+        (click)="selectContact(item)">
+        {{item.name}}
+      </li>
     </ul>
   </section>
-  <section id="chat"></section>
-</div>
+  <section id="chat" class="p-4">
+    <div class="alert alert-primary mb-3" *ngFor="let msg of chat"
+      [class.my-chat-balloon]="msg.idOrigin === idOriginComponent"
+      [class.contact-chat-balloon]="msg.idDestiny === idDestinyComponent" role="alert">
+      <div>{{ msg.description }}</div>
+      <small class="chat-balloon-time">{{ msg.hour }}</small>
+    </div>
 
+
+    <!-- <div class="alert alert-primary my-chat-balloon mb-3" role="alert">
+      <div> minha msg</div>
+      <small class="chat-balloon-time">09:28</small>
+    </div>
+
+    <div class="alert alert-secondary contact-chat-balloon mb-3" role="alert">
+      <div> minha msg</div>
+      <small class="chat-balloon-time">09:28</small>
+    </div> -->
+    <div class="card content-send">
+      <div class="d-flex p-4">
+        <div class="col me-3">
+          <input type="text" name="message" class="form-control form-control-lg" [(ngModel)]="message">
+        </div>
+        <div class="col-auto">
+        <button class="btn btn-primary btn-lg" (click)="send()"><i class="bi bi-cursor-fill"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
