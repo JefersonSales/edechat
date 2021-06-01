@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Message } from '../../models/message.model';
 import { Contact } from '../../models/contact.model';
+import { ContactService } from '../../services/contact.service';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-chat',
@@ -10,11 +12,7 @@ import { Contact } from '../../models/contact.model';
 })
 export class ChatComponent implements OnInit {
   messages: Message[] = [];
-  contacts: Contact[] = [
-    { id: 1, name: 'Carlos' },
-    { id: 2, name: 'Sérgio' },
-    { id: 3, name: 'Jeferson' },
-  ];
+  contacts: Contact[] = []
 
   idOriginComponent: number = 0;
   idDestinyComponent: number = 0;
@@ -23,21 +21,31 @@ export class ChatComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private contactService: ContactService,
+    private chatService: ChatService
   ) { }
 
   ngOnInit(): void {
     if(this.route.snapshot.params.id){
       this.idOriginComponent = this.route.snapshot.params.id;
     }
+
+    this.readContacts();
   }
 
-  makeId(){
-    return ( this.messages.length || 0 ) + 1;
+  readContacts(){
+    this.contactService.read().subscribe(
+      data => {
+        this.contacts = data.filter(x => x.id != this.idOriginComponent);
+      },
+      error => {
+        console.error(error);
+      }
+    )
   }
 
   send(){
     const msg = new Message();
-    msg.id = this.makeId();
     msg.description = this.message;
     msg.idDestiny = this.idDestinyComponent;
     msg.idOrigin = this.idOriginComponent;
